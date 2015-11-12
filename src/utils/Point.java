@@ -16,7 +16,7 @@ public class Point extends Obj3D{
 
 	/** Add a vector to a point */
 	public Point plus(Vector v) {
-		return new Point(x + v.x, y + v.y, z + v.z);
+		return new Point(x + v.getX(), y + v.getY(), z + v.getZ());
 	}
 
 	/** Return the string coordinates of the point */

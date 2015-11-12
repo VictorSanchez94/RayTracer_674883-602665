@@ -2,7 +2,31 @@ package utils;
 
 public class Vector extends Obj3D{
 	/** Class attributes */
-	public double x, y, z;
+	private double x, y, z;
+
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
+	public double getZ() {
+		return z;
+	}
+
+	public void setZ(double z) {
+		this.z = z;
+	}
 
 	/** Class constructor giving XYZ coordinates */
 	public Vector(double x, double y, double z) {
@@ -19,7 +43,7 @@ public class Vector extends Obj3D{
 		this(to.x - from.x, to.y - from.y, to.z - from.z);
 	}
 
-	/** NO SE SI VA A HACER FALTA */
+	/** Vector normalization */
 	public Vector normalize() {
 		double magnitude = magnitude();
 		double divisor;
@@ -41,17 +65,17 @@ public class Vector extends Obj3D{
 		return new Vector(x + v.x, y + v.y, z + v.z);
 	}
 
-	/** NO SE SI VA A HACER FALTA */
+	/** Vector subtraction */
 	public Vector minus(Vector v) {
 		return new Vector(x - v.x, y - v.y, z - v.z);
 	}
 
-	/** NO SE SI VA A HACER FALTA */
+	/** Vector negation */
 	public Vector negate() {
 		return times(-1);
 	}
 
-	/** NO SE SI VA A HACER FALTA */
+	/** Vector multiplication by a number */
 	public Vector times(double scalar) {
 		return new Vector(x * scalar, y * scalar, z * scalar);
 	}

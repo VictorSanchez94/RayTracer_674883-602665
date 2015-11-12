@@ -2,37 +2,37 @@ package utils;
 
 public class Ray {
 
-	private Point point;
-	private Vector vector;
+	private Point origin;
+	private Vector direction;
 	
-	public Ray (Point point, Vector vector) {
-		this.point = point;
-		this.vector = vector;
-	}
-	
-	public Ray (Point point1, Point point2) {
-		this.point = point1;
-		this.vector = new Vector(point1, point2);
-	}
-
-	public Point getPoint() {
-		return point;
-	}
-
-	public void setPoint(Point point) {
-		this.point = point;
-	}
-
-	public Vector getVector() {
-		return vector;
-	}
-
-	public void setVector(Vector vector) {
-		this.vector = vector;
+	public Ray (Point origin, Vector direction) {
+		this.origin = origin;
+		this.direction = direction;
 	}
 	
-	public void setVector(Point from, Point to) {
-		this.vector = new Vector(from, to);
+	public Ray (Point from, Point to) {
+		this.origin = from;
+		this.direction = new Vector(from, to);
+	}
+
+	public Point getOrigin() {
+		return origin;
+	}
+
+	public void setOrigin(Point origin) {
+		this.origin = origin;
+	}
+
+	public Vector getDirection() {
+		return direction;
+	}
+
+	public void setDirection(Vector direction) {
+		this.direction = direction;
+	}
+	
+	public void setDirection(Point from, Point to) {
+		this.direction = new Vector(from, to);
 	}
 	
 }
