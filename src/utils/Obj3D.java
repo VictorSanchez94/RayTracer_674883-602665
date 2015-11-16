@@ -2,9 +2,9 @@ package utils;
 
 public class Obj3D {
 
-	private double x;
-	private double y;
-	private double z;
+	protected double x;
+	protected double y;
+	protected double z;
 	
 	public Obj3D (double x, double y, double z) {
 		this.x = x;

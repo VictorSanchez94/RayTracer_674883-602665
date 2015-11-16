@@ -2,30 +2,29 @@ package utils;
 
 public class Vector extends Obj3D{
 	/** Class attributes */
-	private double x, y, z;
 
 	public double getX() {
-		return x;
+		return super.getX();
 	}
 
 	public void setX(double x) {
-		this.x = x;
+		super.setX(x);
 	}
 
 	public double getY() {
-		return y;
+		return super.getY();
 	}
 
 	public void setY(double y) {
-		this.y = y;
+		super.setY(y);
 	}
 
 	public double getZ() {
-		return z;
+		return super.getZ();
 	}
 
 	public void setZ(double z) {
-		this.z = z;
+		super.setZ(z);
 	}
 
 	/** Class constructor giving XYZ coordinates */
@@ -35,12 +34,12 @@ public class Vector extends Obj3D{
 
 	/** Class constructor giving a Point */
 	public Vector(Point p) {
-		this(p.x, p.y, p.z);
+		super(p.getX(), p.getY(), p.getZ());
 	}
 
 	/** Class constructor giving origin and destination Points */
 	public Vector(Point from, Point to) {
-		this(to.x - from.x, to.y - from.y, to.z - from.z);
+		this(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ());
 	}
 
 	/** Vector normalization */
@@ -62,12 +61,12 @@ public class Vector extends Obj3D{
 
 	/** NO SE SI VA A HACER FALTA */
 	public Vector plus(Vector v) {
-		return new Vector(x + v.x, y + v.y, z + v.z);
+		return new Vector(super.getX() + v.getX(), super.getY() + v.getY(), super.getZ() + v.getZ());
 	}
 
 	/** Vector subtraction */
 	public Vector minus(Vector v) {
-		return new Vector(x - v.x, y - v.y, z - v.z);
+		return new Vector(super.getX() - v.getX(), super.getY() - v.getY(), super.getZ() - v.getZ());
 	}
 
 	/** Vector negation */

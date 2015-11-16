@@ -1,9 +1,9 @@
 package utils;
 
 public class RayHit {
-	public final Ray ray;
-	public final Vector normal;
-	public final Point point;
+	public final Ray ray;			//Incident ray
+	public final Vector normal;		//Object´s normal vector
+	public final Point point;		//Intersection with object point
 
 	public RayHit(Ray ray, Vector normal, Point intersection) {
 		this.ray = ray;
@@ -15,4 +15,8 @@ public class RayHit {
 		return new Ray(point, ray.getDirection().minus(normal.times(2.0*ray.getDirection().dot(normal))));
 	}
 
+	public String toString() {
+		return "ray: " + ray.toString() + "; normal: " + normal.toString() + "; point: " + point.toString();
+	}
+	
 }

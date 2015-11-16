@@ -1,8 +1,6 @@
 package utils;
 
 public class Point extends Obj3D{
-	/** Class attributes */
-	public double x, y, z;
 
 	/** Class constructor */
 	public Point(double x, double y, double z) {
@@ -11,16 +9,26 @@ public class Point extends Obj3D{
 
 	/** Return the distance between two poins */
 	public double distanceTo(Point p) {
-		return Math.sqrt((p.x - x)*(p.x - x) + (p.y - y)*(p.y - y) + (p.z - z)*(p.z - z));
+		return Math.sqrt((p.getX() - super.getX())*(p.getX() - super.getX()) + (p.getY() - super.getY())*(p.getY() - super.getY()) + (p.getZ() - super.getZ())*(p.getZ() - super.getZ()));
 	}
 
 	/** Add a vector to a point */
-	public Point plus(Vector v) {
-		return new Point(x + v.getX(), y + v.getY(), z + v.getZ());
+	public Point plusVector(Vector v) {
+		return new Point(super.getX() + v.getX(), super.getY() + v.getY(), super.getZ() + v.getZ());
+	}
+	
+	/** Add 2 points*/
+	public Point plusPoint(Point p){
+		return new Point(super.getX() + p.getX(), super.getY() + p.getY(), super.getZ() + p.getZ());
+	}
+	
+	/**Subtracts 2 points*/
+	public Point substraction(Point p) {
+		return new Point(super.getX() - p.getX(), super.getY() - p.getY(), super.getZ() - p.getZ());
 	}
 
 	/** Return the string coordinates of the point */
 	public String toString() {
-		return "[" + x + ", " + y + ", " + z + "]";
+		return "[" + super.getX() + ", " + super.getY() + ", " + super.getZ() + "]";
 	}
 }

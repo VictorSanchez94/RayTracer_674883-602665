@@ -35,4 +35,13 @@ public class Ray {
 		this.direction = new Vector(from, to);
 	}
 	
+	public Point getPoint(double lambda) {
+		Point p = new Point(origin.getX()+direction.getX()*lambda, origin.getY()+direction.getY()*lambda, origin.getZ()+direction.getZ()*lambda);
+		return p;
+	}
+	
+	public String toString() {
+		return "origin: " + origin.toString() + ", direction: " + direction.toString();
+	}
+	
 }
