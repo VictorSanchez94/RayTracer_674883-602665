@@ -1,56 +1,78 @@
 package shapes;
 
-import utils.Point;
+import java.awt.Color;
+
+import mathElements.Point;
+import mathElements.Vector;
+import utils.Aspect;
+import utils.Obj3D;
 import utils.Ray;
 import utils.RayHit;
-import utils.Vector;
-import utils.Obj3D;
 
 public class Plane extends Obj3D {
-	private Point a, b, c, d;
+	private Point a, b, c, d;		//Vertex of the plane
 	private Vector normal;
+	private Aspect aspect;
 
 	/**
 	 * Constructor of a plane.
 	 * Arguments must be: a & b => adjacent vertex
 	 * 					  c & d => adjacent vertex
 	 */
-	public Plane(Point a, Point b, Point c, Point d) {
-		super((a.getX()+d.getX())/2, (a.getY()+d.getY())/2, (a.getZ()+d.getZ())/2);
+	public Plane(Point a, Point b, Point c, Point d, Color color) {
+		super((a.getX()+d.getX())/2, (a.getY()+d.getY())/2, (a.getZ()+d.getZ())/2, color);
 		this.a = a;
 		this.b = b;
 		this.c = c;
 		this.d = d;
 		Vector aux1 = new Vector(a,b);
 		Vector aux2 = new Vector(a,c);
-		this.normal = aux1.cross(aux2);
+		this.normal = aux1.cross(aux2).normalize();
+	}
+
+	public Color getColor() {
+		return super.getColor();
+	}
+
+	public void setColour(Color colour) {
+		super.setColour(colour);
 	}
 
 	/**
 	 * Pre: ---
 	 * Post: This method returns a RayHit object with the point where ray intersects
 	 * 		 with the plane.
-	 * 
 	 */
 	public RayHit intersect(Ray ray) {
-		if(ray.getDirection().dot(normal) != 0){	//The ray intersect with plane
-			Vector vAux = new Vector(a.substraction(ray.getOrigin()));
-			double lambda = vAux.dot(normal)/ray.getDirection().dot(normal);
-			return new RayHit(ray,normal,ray.getPoint(lambda));
+		if(ray.getDirection().dot(normal) != 0){	//Ray and plane no parallel
+			Point pAux = new Point(super.getX(), super.getY(), super.getZ());
+			Vector vAux = new Vector(pAux.substraction(ray.getOrigin()));
+			double lambda = vAux.dot(normal) / ray.getDirection().dot(normal);
+			Vector v1 = new Vector(a,b);
+			Vector v2 = new Vector(b,d);
+			Vector v3 = new Vector(d,c);
+			Vector v4 = new Vector(c,a);
+			Point hitPoint = ray.getPoint(lambda);
+			double s1 = v1.cross(new Vector(a,hitPoint)).dot(normal);		//((p2-p1)x(p-p1))*n
+			double s2 = v2.cross(new Vector(b,hitPoint)).dot(normal);		//((p3-p2)x(p-p2))*n
+			double s3 = v3.cross(new Vector(d,hitPoint)).dot(normal);		//((p1-p3)x(p-p3))*n
+			double s4 = v4.cross(new Vector(c,hitPoint)).dot(normal);
+			if(s1 > 0.0 && s2 > 0.0 && s3 > 0 && s4 > 0.0){
+				return new RayHit(ray,normal,ray.getPoint(lambda), this, lambda); 
+			}else{
+				return null;
+			}
 		}else{
 			return null;
 		}		
 	}
 	
-	public static void main (String[] args) {
-		Ray r = new Ray(new Point(2,3,0), new Vector(1.0,0.0,0.0));
-		Plane p = new Plane(new Point(4,4,-2), new Point(4,2,-2), new Point(4,4,2), new Point(4,2,2));
-		RayHit rh = p.intersect(r);
-		if(rh == null){
-			System.out.println("NULL");
-		}else{
-			System.out.println(rh.toString());
-		}
+	public void setAspect(Aspect asp){
+		this.aspect = asp;
+	}
+	
+	public Aspect getAspect(){
+		return aspect;
 	}
 	
 }

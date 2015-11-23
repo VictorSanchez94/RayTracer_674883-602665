@@ -1,41 +1,80 @@
 package shapes;
 
-import utils.Colour;
+import java.awt.Color;
+
+import mathElements.Point;
+import mathElements.Vector;
+import utils.Aspect;
 import utils.Obj3D;
-import utils.Point;
 import utils.Ray;
+import utils.RayHit;
 
 public class Triangle extends Obj3D {
 	
-	private Point p1;
-	private Point p2;
-	private Point p3;
-	private Colour colour;
-	
+	private Point a, b, c;		//Vertex of the triangle
+	private Color color;		//Colour of the triangle
+	private Vector normal;		//Normal vector of the triangle
+	private Aspect aspect;
 	/**
 	 * Constructor with all arguments predefined
 	 */
-	public Triangle (Point p1, Point p2, Point p3, Colour colour) {
-		super((p1.getX()+p2.getX()+p3.getX())/3, (p1.getY()+p2.getY()+p3.getY())/3, (p1.getZ()+p2.getZ()+p3.getZ())/3);
-		this.p1 = p1;
-		this.p2 = p2;
-		this.p3 = p3;
-		this.colour = colour;
+	public Triangle (Point a, Point b, Point c, Color color) {
+		super((a.getX()+b.getX()+c.getX())/3, (a.getY()+b.getY()+c.getY())/3, (a.getZ()+b.getZ()+c.getZ())/3, color);		//Center of the triangle
+		this.a = a;
+		this.b = b;
+		this.c = c;
+		this.color = color;
+		Vector aux1 = new Vector(a,b);
+		Vector aux2 = new Vector(a,c);
+		this.normal = aux1.cross(aux2);
 	}
 	
 	/**
 	 * Constructor with custom colour
 	 */
-	public Triangle (Point p1, Point p2, Point p3, int red, int green, int blue, double K, double I) {
-		super((p1.getX()+p2.getX()+p3.getX())/3, (p1.getY()+p2.getY()+p3.getY())/3, (p1.getZ()+p2.getZ()+p3.getZ())/3);
-		this.p1 = p1;
-		this.p2 = p2;
-		this.p3 = p3;
+	/*public Triangle (Point a, Point b, Point c, int red, int green, int blue, float K, float I) {
+		super((a.getX()+b.getX()+c.getX())/3, (a.getY()+b.getY()+c.getY())/3, (a.getZ()+b.getZ()+c.getZ())/3);
+		this.a = a;
+		this.b = b;
+		this.c = c;
 		this.colour = new Colour(red, green, blue, K, I);
+		Vector aux1 = new Vector(a,b);
+		Vector aux2 = new Vector(a,c);
+		this.normal = aux1.cross(aux2);
+	}*/
+	
+	/**
+	 * Pre: ---
+	 * Post: This method returns a RayHit object with the point where ray intersects
+	 * 		 with the triangle.
+	 */
+	public RayHit intersect (Ray ray) {
+		Vector vAux = new Vector(ray.getOrigin(), a);
+		double lambda = vAux.dot(normal) / ray.getDirection().dot(normal);
+		if(ray.getDirection().times(lambda).plus(ray.getOrigin().substraction(a)).dot(normal) == 0) {	//Ray intersect with plane
+			Point hitPoint = ray.getPoint(lambda);
+			Vector v1 = new Vector(a,b);
+			Vector v2 = new Vector(b,c);
+			Vector v3 = new Vector(c,a);
+			double s1 = v1.cross(new Vector(a,hitPoint)).dot(normal);		//((p2-p1)x(p-p1))*n
+			double s2 = v2.cross(new Vector(b,hitPoint)).dot(normal);		//((p3-p2)x(p-p2))*n
+			double s3 = v3.cross(new Vector(c,hitPoint)).dot(normal);		//((p1-p3)x(p-p3))*n
+			if(s1 > 0.0 && s2 > 0.0 && s3 > 0){			//Ray intersects on the triangle area
+				return new RayHit(ray,normal,hitPoint, this, lambda);
+			}else{
+				return null;
+			}
+		}else{
+			return null;
+		}
 	}
 	
-	public Point getCollisionPoint (Ray ray) {
-		
+	public void setAspect(Aspect asp){
+		this.aspect = asp;
+	}
+	
+	public Aspect getAspect(){
+		return aspect;
 	}
 	
 }

@@ -1,13 +1,18 @@
 package utils;
 
+import mathElements.Point;
+import mathElements.Vector;
+
 public class Ray {
 
 	private Point origin;
 	private Vector direction;
+	private double t;
 	
 	public Ray (Point origin, Vector direction) {
 		this.origin = origin;
 		this.direction = direction;
+		this.t = Double.POSITIVE_INFINITY; //El rayo es infinito
 	}
 	
 	public Ray (Point from, Point to) {
@@ -40,8 +45,23 @@ public class Ray {
 		return p;
 	}
 	
+	public Point getEnd(double t) {
+		return origin.plusVector(direction.times(t));
+	}
+
+	public Point getEnd() {
+		return getEnd(this.t);
+	}
+	
 	public String toString() {
 		return "origin: " + origin.toString() + ", direction: " + direction.toString();
 	}
 	
+	public double getT(){
+		return t;
+	}
+	
+	public void setT(double t){
+		this.t = t;
+	}
 }
