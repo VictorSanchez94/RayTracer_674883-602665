@@ -16,6 +16,20 @@ public class ColorUtil {
 	public static float clamp(float x) {
 		return Math.max(0.0f, Math.min(1.0f, x));
 	}
+	
+	public static Color clampColor(Color color) {
+		Color response = color;
+		if(color.getRed()>255){
+			response = new Color(255, color.getGreen(), color.getBlue());
+		}
+		if(color.getGreen()>255){
+			response = new Color(color.getRed(), 255, color.getBlue());
+		}
+		if(color.getRed()>255){
+			response = new Color(color.getRed(), color.getGreen(), 255);
+		}
+		return response;
+	}
 
 	public static Color intensify(Color color, float intensity) {
 		// TODO: clamp should not be necessary here

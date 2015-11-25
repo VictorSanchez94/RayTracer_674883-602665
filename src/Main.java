@@ -10,7 +10,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		File input = new File("./scene4.txt");
-		File output = new File("./ouput4.bmp");
+		File output = new File("./ouput5.bmp");
 		RayTracer rt = new RayTracer();
 		try {
 			rt.readScene(input);

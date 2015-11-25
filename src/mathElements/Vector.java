@@ -118,4 +118,8 @@ public class Vector extends Obj3D{
 	public String toString() {
 		return "(" + x + ", " + y + ", " + z + ")";
 	}
+	
+	public Vector plusNumber(double n){
+		return new Vector(x+n, y+n, z+n);
+	}
 }

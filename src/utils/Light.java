@@ -3,6 +3,7 @@ package utils;
 import java.awt.Color;
 
 import mathElements.Point;
+import mathElements.Vector;
 
 public class Light extends Obj3D {
 
@@ -28,31 +29,31 @@ public class Light extends Obj3D {
 		super.setColour(colour);
 	}
 	
-	/*public Color getColor(RayHit hit, Ray lightRay) {
+	public Color getColor(RayHit hit, Ray lightRay) {
 		double distance = lightRay.getOrigin().distanceTo(new Point(this.getX(), this.getY(), this.getZ()));
 		//float attenuationFactor = getAttenuationFactor(distance);
 		float attenuationFactor = 1;
 
 		// diffuse
 		float diffuseStrength;
-		//if(hit.getShape().finish.diff > 0) {
-			//diffuseStrength = hit.shape.finish.diff * (float)Math.max(0.0, hit.normal.dot(lightRay.direction));
-		//} else {
+		if(hit.getShape().getAspect().diff > 0) {
+			diffuseStrength = hit.getShape().getAspect().diff * (float)Math.max(0.0, hit.getNormal().dot(lightRay.getDirection()));
+		} else {
 			diffuseStrength = 0.0f;
-		//}
+		}
 
 		// specular
 		float specularStrength;
-		//if(hit.shape.finish.spec > 0) {
-			//Vector halfway = Vector.halfway(lightRay.direction, hit.ray.direction.negate());
-			//specularStrength = hit.shape.finish.spec * (float)Math.pow(Math.max(0.0, hit.normal.dot(halfway)), hit.shape.finish.shiny);
+		if(hit.getShape().getAspect().spec > 0) {
+			Vector halfway = Vector.halfway(lightRay.getDirection(), hit.getRay().getDirection().negate());
+			specularStrength = hit.getShape().getAspect().spec * (float)Math.pow(Math.max(0.0, hit.getNormal().dot(halfway)), hit.getShape().getAspect().shiny);
 
 		// NOTE: the method commented below seems to look better, but the specular points are much smaller, and less spread-out
 //		Vector r = lightRay.direction.minus(hit.normal.times(2.0*lightRay.direction.dot(hit.normal)));
 //		float specularStrength = hit.shape.finish.spec * (float)Math.pow(Math.max(0.0, hit.ray.direction.dot(r)), hit.shape.finish.shiny);
-		//} else {
+		} else {
 			specularStrength = 0.0f;
-		//}
+		}
 
 
 		float[] shapeColor = hit.getShape().getColor(hit.getPoint()).getRGBColorComponents(null);
@@ -64,5 +65,5 @@ public class Light extends Obj3D {
 
 
 		return new Color(ColorUtil.clamp(red), ColorUtil.clamp(green), ColorUtil.clamp(blue));
-	}*/
+	}
 }
