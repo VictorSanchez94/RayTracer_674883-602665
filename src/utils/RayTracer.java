@@ -120,11 +120,11 @@ public class RayTracer {
 		//TODO: Este ray habra que calcularlo distinto para el antialiasing
 		Ray ray = camera.getRay(col,row);
 		RayHit h = findHit(ray);
-		return render(h);
+		return render(h, 1);
 		
 	}
 		
-	public Color render(RayHit h){
+	public Color render(RayHit h, int depth){
 		Color response = null;
 		if(h != null) { // Se ha producido una colision con algun objeto
 			Color color = Color.BLACK;
@@ -134,6 +134,8 @@ public class RayTracer {
 				color = ColorUtil.blend(color, 
 						ColorUtil.intensify(h.getShape().getColor(h.getPoint()), light.getColor(h.getPoint())));
 			}
+			
+			Vector r = null; //Reflection Ray
 			
 			for(int i = 1;i < lights.size();i++) {
 				light = lights.get(i);
@@ -162,21 +164,20 @@ public class RayTracer {
 	
 					
 					// Specular light = ks*Iincidente*cos(R*V)^n
-					Vector r = l.minusVector(h.getNormal().normalize().times(2.0*l.dot(h.getNormal().normalize())));
+					r = l.minusVector(h.getNormal().normalize().times(2.0*l.dot(h.getNormal().normalize())));
 					double specularLight = h.getShape().getAspect().spec * 
 							(float)Math.pow(Math.max(0.0, h.getRay().getDirection().dot(r)), h.getShape().getAspect().shiny);
 					if(specularLight<0){
 						specularLight=0;
 					}
 					if(specularLight>1){
-						//System.out.println(specularLight+" "+h.getShape());
 						specularLight = 1;
 					}
 					
 	
-					Color SpecularColor = new Color ((int)(specularLight*200), 
-							(int)(specularLight*200), 
-							(int)(specularLight*200));
+					Color SpecularColor = new Color ((int)(specularLight*light.getColor().getRed()), 
+							(int)(specularLight*light.getColor().getGreen()), 
+							(int)(specularLight*light.getColor().getBlue()));
 					
 					color = ColorUtil.blend(color, SpecularColor);
 				//}else{
@@ -184,8 +185,24 @@ public class RayTracer {
 					//color = Color.yellow;
 				//}	
 					
-				//TODO: Ahora si eres reflectante se vuelve a llamar recursivamente a esta funcion
-					//Se calcula el rayo reflejado
+			}
+			
+			//Reflection and Reflexion recursion
+			if(depth <= MAX_RECURSION_LEVEL) {
+				if(h.getShape().getAspect().isReflective()) {
+					Ray rayRefl = new Ray(h.getPoint(), r.normalize());
+					RayHit reflex = findHit(rayRefl);
+					//if(refl!=null){
+						//Color colorRefl = render(refl, depth+1);
+						//color = ColorUtil.blend(color, ColorUtil.intensify(colorRefl, h.getShape().getAspect().refl));
+						color = ColorUtil.blend(color, ColorUtil.intensify(render(reflex, depth+1), h.getShape().getAspect().refl));
+					//}
+					//color = ColorUtil.blend(color, ColorUtil.intensify(trace(r, depth+1), hit.getShape().getAspect().refl));
+				}
+
+				//if(hit.getShape().getAspect().isTransmittive()) {
+					//color = ColorUtil.blend(color, ColorUtil.intensify(trace(hit.getTransmissionRay(), depth+1), hit.getShape().getAspect().trans));
+				//}
 			}
 			
 			response = color;
