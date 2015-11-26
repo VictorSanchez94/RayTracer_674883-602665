@@ -7,11 +7,12 @@ import utils.RayTracer;
 
 public class Main {
 
+	public static boolean antialiasing = false;
 	public static void main(String[] args) {
 
-		File input = new File("./scene4.txt");
-		File output = new File("./ouput5.bmp");
-		RayTracer rt = new RayTracer();
+		File input = new File("./scene5.txt");
+		File output = new File("./ouput7.bmp");
+		RayTracer rt = new RayTracer(antialiasing);
 		try {
 			rt.readScene(input);
 			rt.draw(output);

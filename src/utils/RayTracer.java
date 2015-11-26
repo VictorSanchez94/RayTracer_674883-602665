@@ -1,6 +1,7 @@
 package utils;
 
 import java.awt.Color;
+import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,14 +28,15 @@ public class RayTracer {
 	private final ArrayList<Obj3D> shapes = new ArrayList<Obj3D>();
 	private int cols;
 	private int rows;
+	private final boolean antialiasing;
 	
-	public RayTracer(){
-		
+	public RayTracer(boolean antialiasing){
+		this.antialiasing = antialiasing;
 	}
 	/** Read the information in the input file */
 	public void readScene(File file) throws FileNotFoundException {
 		Scanner scanner = new Scanner(file).useLocale(Locale.ENGLISH);
-		System.out.println("Leyendo");
+		System.out.println("Leyendo fichero...");
 		/* Reading General Configuration parameters */
 		Point eye = readPoint(scanner);
 		Point worldCenter = readPoint(scanner);
@@ -104,11 +106,8 @@ public class RayTracer {
 		final BufferedImage image = new BufferedImage(cols, rows, BufferedImage.TYPE_INT_RGB);
 		for(int r = 0;r < rows; r++) {
 			for(int c = 0;c < cols; c++) {
-				//Color color = getPixelColor(c, r);
-				//color = ColorUtil.clamp(color);
-				//System.out.println(color.getRed()+" "+color.getGreen()+" "+color.getBlue());
-				if(c==600 && r==600){
-					System.out.println("AQUI");
+				if(c==645 && r==575){
+					System.out.println("Voy por la mitad");
 				}
 				image.setRGB(c, r, getPixelColor(c, r).getRGB());
 			}
@@ -117,10 +116,36 @@ public class RayTracer {
 	}
 	
 	public Color getPixelColor(int col, int row){
-		//TODO: Este ray habra que calcularlo distinto para el antialiasing
-		Ray ray = camera.getRay(col,row);
-		RayHit h = findHit(ray);
-		return render(h, 1);
+		if(antialiasing){
+			int howManyRays = 15;
+			Color[] colors = new Color[howManyRays];
+			for(int i=0; i<howManyRays; i++){
+				double randomX = Math.random();
+				double randomY = Math.random();
+				Ray ray = camera.getRay(col,row, randomX, randomY);
+				RayHit h = findHit(ray);
+				Color color =  render(h, 1);
+				colors[i]=color;
+			}
+			/*Ray ray1 = camera.getRay(col,row, 0, 0);
+			RayHit h1 = findHit(ray1);
+			Color color1 =  render(h1, 1);
+			Ray ray2 = camera.getRay(col,row, 0, 1);
+			RayHit h2 = findHit(ray2);
+			Color color2 =  render(h2, 1);
+			Ray ray3 = camera.getRay(col,row, 1, 0);
+			RayHit h3 = findHit(ray3);
+			Color color3 =  render(h3, 1);
+			Ray ray4 = camera.getRay(col,row, 1, 1);
+			RayHit h4 = findHit(ray4);
+			Color color4 =  render(h4, 1);*/
+			return ColorUtil.average(colors);
+		}else{
+			Ray ray = camera.getRay(col,row);
+			RayHit h = findHit(ray);
+			return render(h, 1);
+		}
+		
 		
 	}
 		
@@ -141,12 +166,14 @@ public class RayTracer {
 				light = lights.get(i);
 				Point lightLocation = new Point(light.getX(), light.getY(), light.getZ());
 				Vector l = new Vector(h.getPoint(), lightLocation); // Vector beetween hit point and light location
-				l = l.normalize();
+				
 				Ray lightRay = new Ray(h.getPoint().plusVector(l.times(1e-3)), l); //Se le suma epsilon para no chocar consigo mismo
-				lightRay.setT(l.magnitude());
+				//Ray lightRay = new Ray(h.getPoint(), l);
+				l = l.normalize();
+				//lightRay.setT(l.magnitude());
 				//TODO: Sombras no van todavia
-//				RayHit obstruction = findHit(lightRay);
-//				if(obstruction != null) {
+				RayHit obstruction = findHit(lightRay);
+				if(obstruction != null) {
 					
 					// Difuse light
 					double scalarProduct = h.getNormal().normalize().dot(l);
@@ -180,24 +207,18 @@ public class RayTracer {
 							(int)(specularLight*light.getColor().getBlue()));
 					
 					color = ColorUtil.blend(color, SpecularColor);
-				//}else{
-					//System.out.println("Se produce sombra");
-					//color = Color.yellow;
-				//}	
+				}else{
+//					System.out.println("Se produce sombra");
+				}	
 					
 			}
 			
 			//Reflection and Reflexion recursion
 			if(depth <= MAX_RECURSION_LEVEL) {
-				if(h.getShape().getAspect().isReflective()) {
+				if(r!=null && h.getShape().getAspect().isReflective()) {
 					Ray rayRefl = new Ray(h.getPoint(), r.normalize());
 					RayHit reflex = findHit(rayRefl);
-					//if(refl!=null){
-						//Color colorRefl = render(refl, depth+1);
-						//color = ColorUtil.blend(color, ColorUtil.intensify(colorRefl, h.getShape().getAspect().refl));
-						color = ColorUtil.blend(color, ColorUtil.intensify(render(reflex, depth+1), h.getShape().getAspect().refl));
-					//}
-					//color = ColorUtil.blend(color, ColorUtil.intensify(trace(r, depth+1), hit.getShape().getAspect().refl));
+					color = ColorUtil.blend(color, ColorUtil.intensify(render(reflex, depth+1), h.getShape().getAspect().refl));
 				}
 
 				//if(hit.getShape().getAspect().isTransmittive()) {

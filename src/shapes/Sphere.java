@@ -32,8 +32,8 @@ public class Sphere extends Obj3D {
 			return null; 
 		}
 		
-		double intersection1 = (-2*b - Math.sqrt(4*discriminant)) / 2*a;
-		double intersection2 = (-2*b + Math.sqrt(4*discriminant)) / 2*a;
+		double intersection1 = (-2*b - Math.sqrt(discriminant)) / 2*a;
+		double intersection2 = (-2*b + Math.sqrt(discriminant)) / 2*a;
 		
 		if(intersection1 < 0 && intersection2 < 0) { //The sphere is beetween camera and plane of visualization
 			return null;
