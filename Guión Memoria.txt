@@ -1,0 +1,22 @@
+Introducción
+Descripción: 
+	El método del Trazado de Rayos inverso
+	El algoritmo desarrollado
+Arquitectura
+	Diagrama de Clases
+	Breve descripción de cada clase
+Funcionamiento
+	Como se tiran los rayos
+	Como se intersecta
+	Calculo del rayo reflejado
+	Calculo del rayo transmitido
+	Modelo de iluminación
+	Antialiasing
+Rendimiento en nuestros equipos y ejemplos
+Documentación de las clases del código y sus comentarios 
+Conclusión
+
+
+
+
+
