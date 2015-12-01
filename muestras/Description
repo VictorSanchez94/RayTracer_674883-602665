@@ -1,0 +1,9 @@
+3_Reflective_Walls	=> 	(X/Y->Red, Y/Z->Blue, Z/X->Green) 3 paredes sobre los ejes, con coef (0.2	0.6	0	0	1	0	0)
+X_Wall_Reflective	=>	(X/Y->Red, Y/Z->Blue, Z/X->Green) Paredes sobre ejes Z/Y y Z/X no reflectantes (0.2	0.6	0	0	0	0	0) y 
+						pared sobre eje X/Y reflectante (0.2	0.6	0	0	1	0	0)
+Refractado1			=>	Esfera totalmente transparente de color negro que genera sombra con luz que le llega dese arriba, 
+						plano con solo ambiental y difusa.
+Refractado2			=>	Esfera totalmente transparente de color negro que genera sombra con luz encima sobre planos con 
+						solo ambiental y difusa.
+Refractado3			=>	Esfera con transparencia 0.6 de color negro que genera sombra con luz encima sobre planos con 
+						solo ambiental y difusa.
