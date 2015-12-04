@@ -109,7 +109,7 @@ public class Plane extends Obj3D {
 				double s3 = v3.cross(new Vector(d,ray.getEnd(lambda))).dot(normal.negate());		//((p1-p3)x(p-p3))*n
 				double s4 = v4.cross(new Vector(c,ray.getEnd(lambda))).dot(normal.negate());
 				if(s1 > 0.0 && s2 > 0.0 && s3 > 0 && s4 > 0.0){
-					return new RayHit(ray,normal.negate(),ray.getPoint(lambda), this, lambda); 
+					return new RayHit(ray,normal.negate(),ray.getPoint(lambda), this, lambda, true); 
 				}else{
 					return null;
 				}
@@ -125,7 +125,7 @@ public class Plane extends Obj3D {
 					double s3 = v3.cross(new Vector(d,ray.getEnd(lambda))).dot(normal.negate());		//((p1-p3)x(p-p3))*n
 					double s4 = v4.cross(new Vector(c,ray.getEnd(lambda))).dot(normal.negate());
 					if(s1 > 0.0 && s2 > 0.0 && s3 > 0 && s4 > 0.0){
-						return new RayHit(ray,normal.negate(),ray.getPoint(lambda), this, lambda); 
+						return new RayHit(ray,normal.negate(),ray.getPoint(lambda), this, lambda, true); 
 					}else{
 						return null;
 					}

@@ -6,6 +6,7 @@ import mathElements.Vector;
 
 public class Camera {
 	private Point eye;
+	private Point visionPoint;
 	private Vector u;
 	private Vector v;
 	private Vector w;
@@ -16,10 +17,10 @@ public class Camera {
 
 	private double rows, cols;
 
-	public Camera(Point eye, Point center, Vector up, int cols, int rows, 
+	public Camera(Point eye, Point center, Point visionPoint, Vector up, int cols, int rows, 
 			int displayScreenHeight, int displayScreenWidth) {
 
-		Vector g = new Vector(eye, center); //Por comodidad va a mirar al centro del mundo (0,0,0)
+		Vector g = new Vector(eye, visionPoint); //Por comodidad va a mirar al centro del mundo (0,0,0)
 		w = g.negate().normalize(); //LOS BUENOS
 		u = up.cross(w);
 		v = w.cross(u);

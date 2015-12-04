@@ -8,8 +8,8 @@ import utils.RayTracer;
 public class Main {
 
 	public static void main(String[] args) {
-		File input = new File("./sceneTriangle.txt");
-		File output = new File("./outputTriangle.bmp");
+		File input = new File("./sceneCar.txt");
+		File output = new File("./outputCar.bmp");
 		RayTracer rt = new RayTracer();
 		try {
 			rt.readScene(input);

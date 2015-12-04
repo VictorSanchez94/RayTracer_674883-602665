@@ -59,9 +59,33 @@ public class Sphere extends Obj3D {
 			normal = new Vector(center, intersection);
 			incoming = true;
 		}
+		
+//		if(intersection1 < 0 && intersection2 > 0) { // intersection1 is not visible and intersection2 is visible
+//			tValue = intersection2;
+//			intersection = ray.getEnd(tValue);
+//			normal = new Vector(intersection, center);
+//			incoming = false;
+//		} else if (intersection1 > 0 && intersection2 < 0){ // both intersections are visible, take intersection1 because is the nearest
+//			tValue = intersection1;
+//			intersection = ray.getEnd(tValue);
+//			normal = new Vector(center, intersection);
+//			incoming = true;
+//		}else{
+//			if(intersection1 > intersection2){
+//				tValue = intersection1;
+//				intersection = ray.getEnd(tValue);
+//				normal = new Vector(center, intersection);
+//				incoming = true;
+//			}else{
+//				tValue = intersection2;
+//				intersection = ray.getEnd(tValue);
+//				normal = new Vector(intersection, center);
+//				incoming = false;
+//			}
+//		}
 
 		//return new RayHit(ray, this, normal, intersection, incoming);
-		return new RayHit(ray, normal, intersection, this, tValue);
+		return new RayHit(ray, normal, intersection, this, tValue, incoming);
 		
 //		Point p = ray.getOrigin();
 //		Vector u = ray.getDirection();

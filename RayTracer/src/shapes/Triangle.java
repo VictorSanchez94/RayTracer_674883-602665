@@ -46,7 +46,7 @@ public class Triangle extends Obj3D {
 				double s2 = c.minus(b).cross(ray.getEnd(lambda).minus(b)).dot(normal.negate());
 				double s3 = a.minus(c).cross(ray.getEnd(lambda).minus(c)).dot(normal.negate());
 				if((s1 < 0 && s2 < 0 && s3 < 0) || (s1 > 0 && s2 > 0 && s3 > 0)) {			//Same sign => visible
-					return new RayHit(ray,normal.negate(),ray.getEnd(lambda), this, lambda);
+					return new RayHit(ray,normal.negate(),ray.getEnd(lambda), this, lambda, true);
 				}else{
 					return null;
 				}
@@ -57,7 +57,7 @@ public class Triangle extends Obj3D {
 					double s2 = c.minus(b).cross(ray.getEnd(lambda).minus(b)).dot(normal);
 					double s3 = a.minus(c).cross(ray.getEnd(lambda).minus(c)).dot(normal);
 					if((s1 < 0 && s2 < 0 && s3 < 0) || (s1 > 0 && s2 > 0 && s3 > 0)) {		//Same sign => visible
-						return new RayHit(ray,normal,ray.getEnd(lambda), this, lambda);
+						return new RayHit(ray,normal,ray.getEnd(lambda), this, lambda, true);
 					}else{
 						return null;
 					}

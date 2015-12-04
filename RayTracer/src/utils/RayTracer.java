@@ -43,6 +43,7 @@ public class RayTracer {
 		/* Reading General Configuration parameters */
 		Point eye = readPoint(scanner);
 		Point worldCenter = readPoint(scanner);
+		Point visionPoint = readPoint(scanner);
 		Vector up = new Vector(0.0, 1.0, 0.0);
 		int displayScreenHeight = scanner.nextInt();
 		int displayScreenWidth = scanner.nextInt();
@@ -50,7 +51,7 @@ public class RayTracer {
 		int numPixelsY = scanner.nextInt();
 		cols = numPixelsX;
 		rows = numPixelsY;
-		camera = new Camera(eye, worldCenter, up, cols, rows, displayScreenHeight, displayScreenWidth);
+		camera = new Camera(eye, worldCenter, visionPoint, up, cols, rows, displayScreenHeight, displayScreenWidth);
 		
 		/* Reading antialiasing configuration */
 		String aa = scanner.next();
@@ -108,6 +109,7 @@ public class RayTracer {
 				int numVertex = scanner.nextInt();
 				for(int ii=0; ii<numVertex; ii++){
 					Point p = readPoint(scanner);
+					p.plusPoint(new Point(20,20,20));
 					vertex.add(p);
 				}
 				
@@ -121,8 +123,8 @@ public class RayTracer {
 					j = scanner.nextInt();
 					Point p3 = vertex.get(j-1);
 					shape = new Triangle(p1, p2, p3, 
-							new Color(255, 0, 0));
-					shape.setAspect(new Aspect(1, 0, 0, 0, 0, 0, 0));
+							new Color(0, 255, 255));
+					shape.setAspect(new Aspect((float)0.2, (float)0.9, 0, 0, 0, 0, 0));
 					shapes.add(shape);
 				}
 			}else {
@@ -271,20 +273,26 @@ public class RayTracer {
 				}
 
 				if(h.getShape().getAspect().isTransmittive()) {
-					Vector v = h.getRay().getDirection().negate();
-					Vector n = h.getNormal();
-					double cosi = v.dot(n);
-					double nint;
-					//if(incoming) nint = 1.0 / shape.finish.ior;
-					//else nint = shape.finish.ior;
-					nint = h.getShape().getAspect().ior;
-					nint = 1; //TODO: Quizas haya que cambiar esto
-					double cost = Math.sqrt(1.0 - nint*nint * (1 - cosi*cosi));
-
-					Ray rayRefract = new Ray(h.getPoint(), n.times(nint * cosi - cost).minusVector(v.times(nint)));
-					RayHit refract = findHit(rayRefract);
-					color = ColorUtil.blend(color, ColorUtil.intensify(render(refract, depth+1), h.getShape().getAspect().trans));
+					Ray transLight = h.getTransmissionRay();
+					RayHit trans = findHit(transLight);
+					color = ColorUtil.blend(color, ColorUtil.intensify(render(trans, depth+1), h.getShape().getAspect().trans));
 				}
+				
+//				if(h.getShape().getAspect().isTransmittive()) {
+//					Vector v = h.getRay().getDirection().negate();
+//					Vector n = h.getNormal();
+//					double cosi = v.dot(n);
+//					double nint;
+//					//if(incoming) nint = 1.0 / shape.finish.ior;
+//					//else nint = shape.finish.ior;
+//					nint = h.getShape().getAspect().ior;
+//					nint = 1; //TODO: Quizas haya que cambiar esto
+//					double cost = Math.sqrt(1.0 - nint*nint * (1 - cosi*cosi));
+//
+//					Ray rayRefract = new Ray(h.getPoint(), n.times(nint * cosi - cost).minusVector(v.times(nint)));
+//					RayHit refract = findHit(rayRefract);
+//					color = ColorUtil.blend(color, ColorUtil.intensify(render(refract, depth+1), h.getShape().getAspect().trans));
+//				}
 			}
 			
 			response = color;
@@ -293,7 +301,6 @@ public class RayTracer {
 		}
 		return response;
 	}
-	
 	
 	private RayHit findHit(Ray ray) {
 		RayHit hit = null;

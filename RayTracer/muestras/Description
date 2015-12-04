@@ -7,3 +7,5 @@ Refractado2			=>	Esfera totalmente transparente de color negro que genera sombra
 						solo ambiental y difusa.
 Refractado3			=>	Esfera con transparencia 0.6 de color negro que genera sombra con luz encima sobre planos con 
 						solo ambiental y difusa.
+OutputTriangle		=>	Piramide y plano azul opacos con 0.2 amb y 0.9 dif, esfera reflectante espejo perfecto, semitransparente 0.6 y
+						con nivel de refraccion 0.6
